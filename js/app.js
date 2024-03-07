@@ -114,14 +114,8 @@ function mostrarPlatillos(platillos) {
 
 };
 
-function limpiarHtml(selector) {
-  while (selector.firstChild) {
-    selector.removeChild(selector.firstChild)
-  }
-};
-
 function agregarPlato(producto) {
-
+  
   const {cantidad} = producto
   let {pedido} = cliente;
   
@@ -137,7 +131,7 @@ function agregarPlato(producto) {
         return articulo;
       });
       //Se asigna el nuevo array.
-
+      
       cliente.pedido = [...pedidoActualizado];
     } else {
       //Si no existe lo agrega.
@@ -148,5 +142,52 @@ function agregarPlato(producto) {
     const resultado = pedido.filter(articulo => articulo.id !== producto.id);
     cliente.pedido = [...resultado];
   };
-  console.log(cliente);
-}
+  actualizarPedido();
+};
+
+function actualizarPedido() {
+  const contenido =  document.querySelector('#resumen .contenido');
+  limpiarHtml(contenido);
+  
+  const resumen = document.createElement('DIV');
+  resumen.classList.add('col-md-6', 'card', 'py-5', 'py-3', 'shadow', 'rounded-3');
+  
+  //Informacin de la mesa.
+  const mesa = document.createElement('P');
+  mesa.classList.add('fw-bold');
+  mesa.textContent = `Mesa: `
+  
+  const span = document.createElement('SPAN');
+  span.classList.add('fw-normal');
+  span.textContent = cliente.mesa;
+  
+  //Informacion de la hora.
+  const hora = document.createElement('P');
+  hora.classList.add('fw-bold');
+  hora.textContent = `Hora: `
+  
+  const spanH = document.createElement('SPAN');
+  spanH.classList.add('fw-normal');
+  spanH.textContent = cliente.hora;
+  
+  mesa.appendChild(span);
+  hora.appendChild(spanH);
+
+  //Titulo de la sección.
+  const heading = document.createElement('H3');
+  heading.classList.add(`mb-4`, `text-center`);
+  heading.textContent = `Platillos consumidos.`;
+  
+  //Mostrar en el html.
+  resumen.appendChild(heading);
+  resumen.appendChild(mesa);
+  resumen.appendChild(hora);
+
+  contenido.appendChild(resumen);
+};
+
+function limpiarHtml(selector) {
+  while (selector.firstChild) {
+    selector.removeChild(selector.firstChild)
+  }
+};
