@@ -172,12 +172,12 @@ function actualizarPedido() {
   
   mesa.appendChild(span);
   hora.appendChild(spanH);
-
+  
   //Titulo de la sección.
   const heading = document.createElement('H3');
   heading.classList.add(`mb-4`, `text-center`);
   heading.textContent = `Platillos consumidos.`;
-
+  
   const grupo = document.createElement('UL');
   grupo.classList.add('list-group');
   const {pedido} = cliente;
@@ -185,11 +185,11 @@ function actualizarPedido() {
     const {nombre, cantidad, precio, id} = articulo;
     const lista = document.createElement('LI');
     lista.classList.add('list-group-item');
-
+    
     const nombreEl = document.createElement('H4');
     nombreEl.classList.add('my-4');
     nombreEl.textContent = nombre;
-
+    
     const cantidadEl = document.createElement('P');
     cantidadEl.classList.add('fw-bold');
     cantidadEl.textContent = `Cantidad: `;
@@ -205,13 +205,31 @@ function actualizarPedido() {
     const precioValor = document.createElement('SPAN');
     precioValor.classList.add('fw-normal');
     precioValor.textContent = `$${precio}`;
-
+    
     precioEl.appendChild(precioValor);
+    
+    const subtotalEl = document.createElement('P');
+    subtotalEl.classList.add('fw-bold');
+    subtotalEl.textContent = `Subtotal: `;
+    const subtotalValor = document.createElement('SPAN');
+    subtotalValor.classList.add('fw-normal');
+    subtotalValor.textContent = `$${precio*cantidad}`;
+    
+    subtotalEl.appendChild(subtotalValor);
+    
+    const btnEliminar = document.createElement('BUTTON');
+    btnEliminar.classList.add('btn', 'btn-danger');
+    btnEliminar.textContent = `Eliminar`;
+    btnEliminar.onclick = () => {
+      eliminarProducto(id);
+    }
 
     lista.appendChild(nombreEl);
     lista.appendChild(cantidadEl);
     lista.appendChild(precioEl);
-
+    lista.appendChild(subtotalEl);
+    lista.appendChild(btnEliminar);
+    
     grupo.appendChild(lista);
   });
   
@@ -220,9 +238,18 @@ function actualizarPedido() {
   resumen.appendChild(mesa);
   resumen.appendChild(hora);
   resumen.appendChild(grupo);
-
+  
   contenido.appendChild(resumen);
 };
+
+function eliminarProducto(id) {
+  const {pedido} = cliente
+  const contenido =  document.querySelector('#resumen .contenido');
+  const resultado = pedido.filter(articulo => articulo.id !== id);
+  cliente.pedido = [...resultado];
+  limpiarHtml(contenido);
+  actualizarPedido();
+}
 
 function limpiarHtml(selector) {
   while (selector.firstChild) {
