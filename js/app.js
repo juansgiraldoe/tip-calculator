@@ -159,16 +159,15 @@ function actualizarPedido() {
   
   //Informacin de la mesa.
   const mesa = document.createElement('P');
-  mesa.classList.add('fw-bold');
+  mesa.classList.add('fw-bold', 'border', 'py-2', 'd-inline', 'rounded', 'px-4');
   mesa.textContent = `Mesa: `
-  
   const span = document.createElement('SPAN');
   span.classList.add('fw-normal');
   span.textContent = cliente.mesa;
   
   //Informacion de la hora.
   const hora = document.createElement('P');
-  hora.classList.add('fw-bold');
+  hora.classList.add('fw-bold', 'border', 'py-2', 'd-inline', 'rounded', 'px-4');
   hora.textContent = `Hora: `
   
   const spanH = document.createElement('SPAN');
@@ -180,7 +179,7 @@ function actualizarPedido() {
   
   //Titulo de la sección.
   const heading = document.createElement('H3');
-  heading.classList.add(`mb-4`, `text-center`);
+  heading.classList.add(`my-4`, `text-center`);
   heading.textContent = `Platillos consumidos.`;
   
   const grupo = document.createElement('UL');
@@ -239,12 +238,19 @@ function actualizarPedido() {
   });
   
   //Mostrar en el html.
+  const descriptionDiv = document.createElement('DIV');
+  descriptionDiv.classList.add('d-flex', 'justify-content-around');
+  descriptionDiv.appendChild(mesa);
+  descriptionDiv.appendChild(hora);
+  
   resumen.appendChild(heading);
-  resumen.appendChild(mesa);
-  resumen.appendChild(hora);
+  resumen.appendChild(descriptionDiv);
   resumen.appendChild(grupo);
   
   contenido.appendChild(resumen);
+
+  //Imprimir formulario de propinas.
+  formularioPropinas();
 };
 
 function eliminarProducto(id) {
@@ -274,6 +280,75 @@ function mensjeVacio() {
   contenido.appendChild(texto)
 };
 
+function formularioPropinas() {
+  const contenido = document.querySelector('#resumen .contenido');
+  contenido.classList.add('justify-content-around')
+  const formulario = document.createElement('DIV');
+  formulario.classList.add('col-md-6', 'formulario');
+  const heading = document.createElement('H3');
+  heading.classList.add('mb-4', 'text-center');
+  heading.textContent = `Propina.`
+  
+  const divForm = document.createElement('DIV')
+  divForm.classList.add('card', 'py-5', 'px-3', 'shadow', 'rounded-3');
+
+  const radio10 = document.createElement('INPUT');
+  radio10.type = 'radio';
+  radio10.name = 'propina';
+  radio10.value = 10;
+  radio10.classList.add('form-check-input');
+  const radio10Label = document.createElement('LABEL');
+  radio10Label.textContent = '10%';
+  radio10Label.classList.add('form-check-label');
+
+  const radio10Div = document.createElement('DIV');
+  radio10Div.classList.add('form-check');
+
+  radio10Div.appendChild(radio10);
+  radio10Div.appendChild(radio10Label);
+
+  const radio20 = document.createElement('INPUT');
+  radio20.type = 'radio';
+  radio20.name = 'propina';
+  radio20.value = 15;
+  radio20.classList.add('form-check-input');
+  const radio20Label = document.createElement('LABEL');
+  radio20Label.textContent = '15%';
+  radio20Label.classList.add('form-check-label');
+
+  const radio20Div = document.createElement('DIV');
+  radio20Div.classList.add('form-check');
+
+  radio20Div.appendChild(radio20);
+  radio20Div.appendChild(radio20Label);
+
+  const radio30 = document.createElement('INPUT');
+  radio30.type = 'radio';
+  radio30.name = 'propina';
+  radio30.value = 20;
+  radio30.classList.add('form-check-input');
+  const radio30Label = document.createElement('LABEL');
+  radio30Label.textContent = '20%';
+  radio30Label.classList.add('form-check-label');
+
+  const radio30Div = document.createElement('DIV');
+  radio30Div.classList.add('form-check');
+
+  radio30Div.appendChild(radio30);
+  radio30Div.appendChild(radio30Label);
+
+  divForm.appendChild(heading);
+
+  const divOpciones = document.createElement('DIV');
+  divOpciones.classList.add('d-flex','justify-content-around');
+  divOpciones.appendChild(radio10Div);
+  divOpciones.appendChild(radio20Div);
+  divOpciones.appendChild(radio30Div);
+  divForm.appendChild(divOpciones);
+  formulario.appendChild(divForm);
+
+  contenido.appendChild(formulario);
+};
 function limpiarHtml(selector) {
   while (selector.firstChild) {
     selector.removeChild(selector.firstChild);
