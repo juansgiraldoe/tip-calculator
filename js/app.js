@@ -23,6 +23,9 @@ function guardarCliente() {
   const modalForm = document.querySelector('#formulario');
   const modalBootstrap = bootstrap.Modal.getInstance(modalForm);
   modalBootstrap.hide();
+
+  //Mostrar secciones.
+  mostrarSecciones();
 };
 
 function imprimirAlerta(msg) {
@@ -36,4 +39,9 @@ function imprimirAlerta(msg) {
       alerta.remove();
     }, 2000);
   };
+};
+
+function mostrarSecciones() {
+  const seccionesOcultas = document.querySelectorAll('.d-none');
+  seccionesOcultas.forEach(seccion  => seccion.classList.remove('d-none'));
 };
