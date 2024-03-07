@@ -142,7 +142,12 @@ function agregarPlato(producto) {
     const resultado = pedido.filter(articulo => articulo.id !== producto.id);
     cliente.pedido = [...resultado];
   };
-  actualizarPedido();
+  
+  if (cliente.pedido.length) {
+    actualizarPedido();
+  } else {
+    mensjeVacio();
+  };
 };
 
 function actualizarPedido() {
@@ -248,11 +253,29 @@ function eliminarProducto(id) {
   const resultado = pedido.filter(articulo => articulo.id !== id);
   cliente.pedido = [...resultado];
   limpiarHtml(contenido);
-  actualizarPedido();
-}
+  
+  if (cliente.pedido.length) {
+    actualizarPedido();
+  } else {
+    mensjeVacio();
+  };
+
+  const productoEliminado = `#producto-${id}`;
+  const inputEliminar = document.querySelector(productoEliminado);
+  inputEliminar.value = 0;
+};
+
+function mensjeVacio() {
+  const contenido = document.querySelector('#resumen .contenido');
+  limpiarHtml(contenido)
+  const texto = document.createElement('P');
+  texto.classList.add('text-center'); 
+  texto.textContent = `Añade los elementos del pedido.`
+  contenido.appendChild(texto)
+};
 
 function limpiarHtml(selector) {
   while (selector.firstChild) {
-    selector.removeChild(selector.firstChild)
+    selector.removeChild(selector.firstChild);
   }
 };
