@@ -16,6 +16,13 @@ function guardarCliente() {
     imprimirAlerta('Ambos campor son obligatorios.');
     return;
   };
+  //Asignar datos del form.
+  cliente = {...cliente, mesa, hora};
+
+  //Cerrar modal
+  const modalForm = document.querySelector('#formulario');
+  const modalBootstrap = bootstrap.Modal.getInstance(modalForm);
+  modalBootstrap.hide();
 };
 
 function imprimirAlerta(msg) {
