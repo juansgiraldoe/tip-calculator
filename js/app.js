@@ -4,12 +4,6 @@ let cliente = {
   pedido: [],
 };
 
-const categorias = {
-  1: 'Comida. 🍽',
-  2: 'Bebidas. 🥤',
-  3: 'Postres. 🥧',
-}
-
 const btnCliente = document.querySelector('#guardar-cliente');
 window.onload = ()=> btnCliente.addEventListener('click', guardarCliente);
 
@@ -68,32 +62,53 @@ function obtenerPlatillos() {
 function mostrarPlatillos(platillos) {
 
   const contenido = document.querySelector('#platillos .contenido');
+
+  const categorias = {
+    1: 'Comida. 🍽',
+    2: 'Bebidas. 🥤',
+    3: 'Postres. 🥧',
+  }
   
   limpiarHtml(contenido);
 
-  platillos.forEach( plattillo => {
+  platillos.forEach( platillo => {
     
     const row = document.createElement('DIV');
     row.classList.add('row', 'py-2', 'border-top');
 
     const nombre = document.createElement('DIV');
     nombre.classList.add('col-md-4', 'fw-semibold')
-    nombre.textContent = plattillo.nombre;
+    nombre.textContent = platillo.nombre;
     
     const precio = document.createElement('DIV');
     precio.classList.add('col-md-3', 'fw-bolder');
-    precio.textContent = `$${plattillo.precio}`;
+    precio.textContent = `$${platillo.precio}`;
     
     const categoria = document.createElement('DIV');
     categoria.classList.add('col-md-3');
-    categoria.textContent = categorias[plattillo.categoria];
+    categoria.textContent = categorias[platillo.categoria];
 
+    const inputCantidad = document.createElement('INPUT');
+    inputCantidad.type = 'number';
+    inputCantidad.min = 0;
+    inputCantidad.value = 0;
+    inputCantidad.id = `producto-${platillo.id}`;
+    inputCantidad.classList.add('form-control');
+    //Deteccion de cantidades en el platillo.
+    inputCantidad.onchange = ()=>{
+      const cantidad = parseInt(inputCantidad.value);
+      agregarPlato({...platillo, cantidad});
+    };
 
+    const cantidad = document.createElement('DIV');
+    cantidad.classList.add('col-md-2');
     
     //Imprimir en el Html.
+    cantidad.appendChild(inputCantidad);
     row.appendChild(nombre);
     row.appendChild(precio);
     row.appendChild(categoria);
+    row.appendChild(cantidad);
     contenido.appendChild(row);
   });
 
@@ -103,4 +118,35 @@ function limpiarHtml(selector) {
   while (selector.firstChild) {
     selector.removeChild(selector.firstChild)
   }
+};
+
+function agregarPlato(producto) {
+
+  const {cantidad} = producto
+  let {pedido} = cliente;
+  
+  //Validar que la cantidad sea mayor a 0.
+  if (cantidad > 0) {
+    //Comprobar si el articulo esta en el Arryay.
+    if (pedido.some( plato => plato.id === producto.id)) {
+      //Si existe actualiza la cantidad.
+      const pedidoActualizado = pedido.map( articulo => {
+        if (articulo.id === producto.id) {
+          articulo.cantidad = producto.cantidad;
+        };
+        return articulo;
+      });
+      //Se asigna el nuevo array.
+
+      cliente.pedido = [...pedidoActualizado];
+    } else {
+      //Si no existe lo agrega.
+      cliente.pedido = [...pedido, producto];
+    }
+  } else {
+    //Eliminar elementos con cantidad 0.
+    const resultado = pedido.filter(articulo => articulo.id !== producto.id);
+    cliente.pedido = [...resultado];
+  };
+  console.log(cliente);
 }
