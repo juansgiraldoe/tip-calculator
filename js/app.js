@@ -117,7 +117,7 @@ function mostrarPlatillos(platillos) {
 function agregarPlato(producto) {
   
   const {cantidad} = producto
-  let {pedido} = cliente;
+  const {pedido} = cliente;
   
   //Validar que la cantidad sea mayor a 0.
   if (cantidad > 0) {
@@ -177,11 +177,49 @@ function actualizarPedido() {
   const heading = document.createElement('H3');
   heading.classList.add(`mb-4`, `text-center`);
   heading.textContent = `Platillos consumidos.`;
+
+  const grupo = document.createElement('UL');
+  grupo.classList.add('list-group');
+  const {pedido} = cliente;
+  pedido.forEach(articulo => {
+    const {nombre, cantidad, precio, id} = articulo;
+    const lista = document.createElement('LI');
+    lista.classList.add('list-group-item');
+
+    const nombreEl = document.createElement('H4');
+    nombreEl.classList.add('my-4');
+    nombreEl.textContent = nombre;
+
+    const cantidadEl = document.createElement('P');
+    cantidadEl.classList.add('fw-bold');
+    cantidadEl.textContent = `Cantidad: `;
+    const cantidadValor = document.createElement('SPAN');
+    cantidadValor.classList.add('fw-normal');
+    cantidadValor.textContent = cantidad;
+    
+    cantidadEl.appendChild(cantidadValor);
+
+    const precioEl = document.createElement('P');
+    precioEl.classList.add('fw-bold');
+    precioEl.textContent = `Precio: `;
+    const precioValor = document.createElement('SPAN');
+    precioValor.classList.add('fw-normal');
+    precioValor.textContent = `$${precio}`;
+
+    precioEl.appendChild(precioValor);
+
+    lista.appendChild(nombreEl);
+    lista.appendChild(cantidadEl);
+    lista.appendChild(precioEl);
+
+    grupo.appendChild(lista);
+  });
   
   //Mostrar en el html.
   resumen.appendChild(heading);
   resumen.appendChild(mesa);
   resumen.appendChild(hora);
+  resumen.appendChild(grupo);
 
   contenido.appendChild(resumen);
 };
